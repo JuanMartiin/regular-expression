@@ -6,18 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expresiones regulares</title>
     <link rel="stylesheet" href="style.css">
-    <script type="module" src="js/cliente.js"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="login">
+    <form class="login">
+        <h2>Login</h2>
+        <label for="email">Email</label><br>
         <input id="email" type="email" placeholder="Email">
-        <input id="password" type="password" placeholder="Password">
-        <div id="login-btn" class="custom-btn">Login</div>
+        <label for="password">Password</label><br>
+        <input type="text" id="password" name="password" />
+        <div id="login-btn" class="login-btn">LOGIN</div> 
+    </form>
+    <div class="expresion-regular-container" id="expresion-regular-container">
+            <label for="expression">Expresion</label><br>
+            <input type="text" id="regular" name="regular"/><br>
+            <p id="check" class="check">Comprobando</p>
+            <input type="submit" id="send-btn" class="custom-btn" value="COMPROBAR"></div> 
     </div>
 
-    <div class="expresion-regular-container">
-        <input id="regular" type="text" placeholder="Expresion regular">
-        <div id="send-btn" class="custom-btn">Send</div>
-    </div>
+    <script type="module" src="js/cliente.js"></script>
 </body>
 </html>

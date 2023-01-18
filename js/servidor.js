@@ -1,29 +1,28 @@
-const express = require("express");
+const express = require('express');
+const bodyparser = require('body-parser');
+const jwt = require('jsonwebtoken');
+const cors = require("cors");
+require('dotenv').config()
+var WebSocketServer = require("ws").Server;
+
 const app = express();
-const jwt = require("jsonwebtoken");
-const url = require('url');
-const websocket = require('ws');
-require('dotenv').config();
 
-var cliente;
-var peticiones = 0;
-const LIMIT_REQUESTS = 5;
+app.use(bodyparser.json());
+app.use(cors());
 
-app.use(express.json());
+const PORT = process.env.PORT || 3000;
+var server = app.listen(PORT, () => {
+    console.log(`server running on port 3000`)
+})
 
-// Server listening on port 3000
-const servidor = app.listen(3000, () => {
-    console.log("Server running on port 3000");
-});
 
 app.post("/login", async (req, res) => {
-    
+    // create token
     const token = jwt.sign({
-        email: req.body.email,
-        password: req.body.password
-    }, process.env.TOKEN_SECRET, {
-        expiresIn: '10m'
-    });
+        name: req.body.name,
+        id: req.body.id
+    }, process.env.TOKEN_SECRET, 
+    { expiresIn : 600 });
 
     res.header('auth-token', token).json({
         error: null,
@@ -32,31 +31,28 @@ app.post("/login", async (req, res) => {
 });
 
 
-const wss = new websocket.Server({ server: servidor, path: '/webs' });
+const wss = new WebSocketServer({ server: server, path: '/request' });
 
 wss.on('connection', (ws, req) => {
-    
-    var token = url.parse(req.url, true).token;
-    
-    jwt.verify(token, process.env.TOKEN_SECRET, (err) => {
-        if (err) {
-            ws.close();
-        } else {
-            cliente = ws;
-        }
-    });
-    
-    ws.on('message', (data) => {
-        jwt.verify(token, process.env.TOKEN_SECRET, (err) => {
-            if (err || peticiones >= LIMIT_REQUESTS) {
-                ws.send("Error: El token no es valido.");
-                ws.close();
+  var token = url.parse(req.url, true).query.token;
+
+  jwt.verify(token, jwtSecret, (err, decoded) => {
+      if (err) {
+          ws.close();
+      } else {
+          ws.send('(Prueba) Entra en else');
+      }
+  });
+
+  ws.on('message', (data) => {
+        jwt.verify(token, jwtSecret, (err, decoded) => {
+            if (err) {
+                client.send("Your token has expirated");
+                client.close();
             } else {
-                //token valido
-                //No se que hacer aqui
+                client.send(wsUsername + ": " + data);
             }
-        });
-        // Aumentamos el numero de peticion
-        peticiones++;
-    });
+    })
+});
+
 });
