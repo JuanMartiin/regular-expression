@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jison": "^0.4.18",
+    "jsonwebtoken": "^9.0.0",
+    "node": "^19.4.0",
+    "path": "^0.12.7",
+    "ws": "^8.12.0"
+  },
+  "name": "regular-expression",
+  "version": "1.0.0",
+  "main": "gramatica.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
